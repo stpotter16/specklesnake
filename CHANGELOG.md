@@ -21,3 +21,8 @@
 <!-- **Internal:** -->
 
 ## [Unreleased](https://github.com/enthought/seismic-labeling/tree/HEAD)
+
+**Internal:**
+
+Add requirements files [#1](https://github.com/stpotter16/specklesnake/pull/1)
+

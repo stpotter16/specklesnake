@@ -1,0 +1,6 @@
+-r requirements.txt
+
+cv2
+jupyter
+matplotlib
+scipy
