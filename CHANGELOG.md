@@ -22,6 +22,10 @@
 
 ## [Unreleased](https://github.com/enthought/seismic-labeling/tree/HEAD)
 
+**Added:**
+
+Add Bspline basis and knot utility functions [#3](https://github.com/stpotter16/specklesnake/pull/3)
+
 **Internal:**
 
 Add requirements files [#1](https://github.com/stpotter16/specklesnake/pull/1)
