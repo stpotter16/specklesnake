@@ -23,6 +23,7 @@
 ## [Unreleased](https://github.com/enthought/seismic-labeling/tree/HEAD)
 
 **Added:**
+Add setup.py and setup.cfg [#5](https://github.com/stpotter16/specklesnake/pull/5)
 Add Bspline basis function tests [#4](https://github.com/stpotter16/specklesnake/pull/4)
 Add Bspline basis and knot utility functions [#3](https://github.com/stpotter16/specklesnake/pull/3)
 
