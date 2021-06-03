@@ -1,0 +1,14 @@
+name: unit-test
+on: [pull_request]
+jobs:
+  test-linux:
+    runs-on: ubuntu-18.04
+    steps:
+    - name: checkout
+    - uses: actions/checkout@v2
+
+    - name: install specklesnake
+    - run: pip intstall -r requirements.txt && pip install -e .
+
+    - name: run tests
+    - run: python -m unittest discover -v .
