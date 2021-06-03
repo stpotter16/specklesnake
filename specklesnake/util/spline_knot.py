@@ -94,6 +94,7 @@ def check_knot_vector(degree, knot_vector, num_ctrlpts):
     bool
         Whether or not the knot vector is valid
     """
+    knot_vector = np.array(knot_vector)
     # Normalize knot vector
     knot_vector = normalize(knot_vector)
     # Check that the length is correct
