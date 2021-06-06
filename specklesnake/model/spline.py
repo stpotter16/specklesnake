@@ -231,9 +231,8 @@ class BSplineSurface:
         basis_funs_u_ders = basis_function_ders(u_span, u, self._degree_u, self._knot_vector_u, max_order_u)
         basis_funs_v_ders = basis_function_ders(v_span, v, self._degree_v, self._knot_vector_v, max_order_v)
 
-        # FIXME: This isn't really what I want, should be column spaced
-        ctrlpt_x = self._control_points[0, :]
-        ctrlpt_y = self._control_points[1, :]
+        ctrlpt_x = self._control_points[:, 0]
+        ctrlpt_y = self._control_points[:, 1]
 
         x_array = np.reshape(ctrlpt_x, (self._num_control_points_u, self._num_control_points_v))
         y_array = np.reshape(ctrlpt_y, (self._num_control_points_u, self._num_control_points_v))
