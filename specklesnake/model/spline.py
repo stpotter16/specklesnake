@@ -1,12 +1,14 @@
 import numpy as np
 
 from specklesnake.util.spline_basis import basis_functions, basis_function_ders
-from specklesnake.util.spline_knot import check_knot_vector, find_span, validate_knot
+from specklesnake.util.spline_knot import (
+    check_knot_vector, find_span, validate_knot
+)
 
 
 class BSplineSurface:
     """ A B-Spline Surface
-        
+
         Attributes
         ----------
         degree_u: int
@@ -107,9 +109,9 @@ class BSplineSurface:
 
         if self._num_control_points_u is None:
             raise ValueError('Surface control point number in u must be set before setting knot vector')
-        
+
         if self._check_knot_vector(kv, direction='u'):
-            self._knot_vector_u = kv 
+            self._knot_vector_u = kv
 
     @property
     def knot_vector_v(self):
@@ -125,24 +127,24 @@ class BSplineSurface:
 
         if self._num_control_points_v is None:
             raise ValueError('Surface control point number in v must be set before setting knot vector')
-        
+
         if self._check_knot_vector(kv, direction='v'):
             self._knot_vector_v = kv
-            
+
     def single_point(self, u, v):
         """ Evaluate a surface at a single parametric point
 
         Parameters
         ----------
         knot_u : float
-            Parameter in u at which to evaluate surface 
+            Parameter in u at which to evaluate surface
         knot_v : float
             Parameter in v at withch to evaluate surface
 
         Returns
         -------
         point : array
-            Evalued coordinate point 
+            Evalued coordinate point
         """
         u = float(u)
         v = float(v)
@@ -178,7 +180,7 @@ class BSplineSurface:
         ----------
         knots : array
             Array of parametric points (u,v) to evaluate
-        
+
         Returns
         -------
         points : array
@@ -208,7 +210,7 @@ class BSplineSurface:
             Max order of derivatives in v to evaluate
         normalize : bool, optional
             Normalize output derivatives
-        
+
         Returns
         -------
         derivs : array

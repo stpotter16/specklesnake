@@ -4,7 +4,8 @@ import numpy as np
 from numpy.testing import assert_array_almost_equal
 
 from specklesnake.util.spline_knot import (
-    check_knot_vector, find_multiplicity, find_span, generate_uniform, normalize
+    check_knot_vector, find_multiplicity, find_span, generate_uniform,
+    normalize
 )
 
 SPANS = [
@@ -16,6 +17,7 @@ SPANS = [
     (3.0, 5),  # Should return left side of interval
     (5.0, 7),  # Edge case: should return num_ctrlpts - 1 (n)
 ]
+
 
 class TestSplineKnotFunctions(unittest.TestCase):
     def test_find_span(self):
@@ -29,7 +31,6 @@ class TestSplineKnotFunctions(unittest.TestCase):
     def test_normalize(self):
         original = np.array([0, 0, 0, 1, 2, 2, 2])
         normalized = np.array([0, 0, 0, 0.5, 1, 1, 1])
-        
         assert_array_almost_equal(normalized, normalize(original))
 
     def test_check(self):

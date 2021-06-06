@@ -4,7 +4,8 @@ import numpy as np
 from numpy.testing import assert_array_almost_equal
 
 from specklesnake.util.spline_basis import (
-    basis_functions, basis_function_ders, one_basis_function, one_basis_function_ders
+    basis_functions, basis_function_ders, one_basis_function,
+    one_basis_function_ders
 )
 
 

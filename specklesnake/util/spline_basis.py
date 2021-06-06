@@ -17,14 +17,15 @@ def basis_functions(knot_span, knot, degree, knot_vector):
         Degree of basis
     knot_vector : array
         Knot vector containing knot and knot span
-    
+
     Returns
     -------
     N : array
         Non-vanishing basis functions evaluated at knot
     """
 
-    # Initialize empty array to hold the degree + 1 non-vanishing basis values. Note N[0] = 1.0 by def
+    # Initialize empty array to hold the degree + 1 non-vanishing basis values.
+    # Note N[0] = 1.0 by definition
     N = np.ones(degree + 1)
 
     # Initialize empty array to hold left and right computation values
@@ -52,8 +53,8 @@ def basis_function_ders(knot_span, knot, degree, knot_vector, deriv_order):
     """
     Algorithm A2.3 from Piegl & Tiller, The NURBS Book, 1997
 
-    Compute non-vanishing basis functions and associated derivatives up to a specified order for a given knot value and
-    knot index
+    Compute non-vanishing basis functions and associated derivatives up to a
+    specified order for a given knot value and knot index
 
     Parameters
     ----------
@@ -71,18 +72,18 @@ def basis_function_ders(knot_span, knot, degree, knot_vector, deriv_order):
     Returns
     -------
     ders : array
-        Array containing values of non-vanishing basis functions and all derivative orders up to `deriv_order` evalued
-        at `knot`
-    
+        Array containing values of non-vanishing basis functions and all
+        derivative orders up to `deriv_order` evalued at `knot`
+
     Notes
     -----
     ders array structure:
-    row 0 - Values at knot_span [zeroth order, 1st order, ..., deriv_order]
-    row 1 - Values at knot_span - 1 [zeroth order, 1st order, ..., deriv_order]
+    row 0 - Values at knot_span [0th order, 1st order, ..., deriv_order]
+    row 1 - Values at knot_span - 1 [0th order, 1st order, ..., deriv_order]
     .
     .
     .
-    row degree - Values at knot_span - degree [zeroth order, 1st order, ..., deriv_order]
+    row degree - Values at knot_span - degree
     """
 
     # Initialize output and local arrays
@@ -165,7 +166,8 @@ def one_basis_function(degree, knot_vector, knot_span, knot):
     """
     Algorithm A2.4 from Piegl & Tiller, The NURBS Book, 1997
 
-    Compute value of single basis function at specified knot span and knot value with given knot vector and degree.
+    Compute value of single basis function at specified knot span and
+    knot value with given knot vector and degree.
 
     Parameters
     ----------
@@ -184,16 +186,19 @@ def one_basis_function(degree, knot_vector, knot_span, knot):
         Value of specified basis function and specified knot value
     """
 
-    # Check some special cases first. Account for the fact that arrays are zero indexed
+    # Check some special cases first.
+    # Account for the fact that arrays are zero indexed
     if (knot_span == 0 and knot == knot_vector[0]) or \
             (knot_span == len(knot_vector) - degree - 2 and knot == knot_vector[len(knot_vector) - 1]):
         return 1.0
 
-    # If knot value is outside the compact support of the basis function, return zero
+    # If knot value is outside the compact support of the basis function
+    # return zero
     if knot < knot_vector[knot_span] or knot > knot_vector[knot_span + degree + 1]:
         return 0.0
 
-    # Initialize zero degree functions. Length corresponds to number of knot spans in range of support
+    # Initialize zero degree functions. Length corresponds to number of knot
+    # spans in range of support
     N = np.zeros(knot_span + degree + 1)
 
     for j in range(0, degree + 1):
@@ -225,8 +230,8 @@ def one_basis_function_ders(degree, knot_vector, knot_span, knot, deriv_order):
     """
     Algorithm A2.5 from Piegl & Tiller, The NURBS Book, 1997
 
-    Compute non-vanishing basis functions and associated derivatives up to a specified order of a specified basis
-    function at a give knot value
+    Compute non-vanishing basis functions and associated derivatives up to a
+    specified order of a specified basis function at a give knot value
 
     Parameters
     ----------
@@ -244,8 +249,8 @@ def one_basis_function_ders(degree, knot_vector, knot_span, knot, deriv_order):
     Returns
     -------
     ders : array
-        Array containing values of specified basis functions and all derivative orders up to `deriv_order`
-        evaluated at knot value
+        Array containing values of specified basis functions and all derivative
+        orders up to `deriv_order` evaluated at knot value
     """
 
     # Initialize return variable
@@ -288,7 +293,8 @@ def one_basis_function_ders(degree, knot_vector, knot_span, knot, deriv_order):
     ND = np.zeros(deriv_order + 1)
     for k in range(1, deriv_order + 1):
 
-        # Grab the right column from the table of basis function values we built above
+        # Grab the right column from the table of basis function values
+        # we built above
         for j in range(0, k + 1):
             ND[j] = N[j, degree - k]
 

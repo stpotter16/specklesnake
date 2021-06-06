@@ -27,8 +27,8 @@ def find_span(num_ctrlpts, degree, knot, knot_vector, **kwargs):
     # NOTE: Number of knot intervals, n, are based on number of control points.
     # Per convention in The NURBS Book, num_ctrlpts = n + 1
 
-    # Edge case: Return highest knot interval (n) if the knot is equal to the knot vector value
-    # in that span
+    # Edge case: Return highest knot interval (n) if the knot is equal to the
+    # knot vector value in that span
     rtol = kwargs.get('rtol', 1e-6)
     if np.allclose(knot, knot_vector[num_ctrlpts], rtol=rtol):
         return num_ctrlpts - 1
@@ -54,6 +54,7 @@ def find_span(num_ctrlpts, degree, knot, knot_vector, **kwargs):
 
     return mid
 
+
 def normalize(knot_vector):
     """
     Normalize input knot vector to [0, 1].
@@ -62,7 +63,7 @@ def normalize(knot_vector):
     ----------
     knot_vector : array
         Knot vector to be normalized
-    
+
     Returns
     normalized: array
         Normalized knot vector
@@ -73,7 +74,7 @@ def normalize(knot_vector):
     normalized = knot_vector - min_knot * np.ones(knot_vector.shape)
     normalized *= 1 / (max_knot - min_knot)
 
-    return normalized 
+    return normalized
 
 
 def check_knot_vector(degree, knot_vector, num_ctrlpts):
@@ -88,7 +89,7 @@ def check_knot_vector(degree, knot_vector, num_ctrlpts):
         Knot vector in question
     num_ctrlpts : int
         Number of control points associated with knot vector
-    
+
     Returns
     -------
     bool
@@ -117,7 +118,8 @@ def check_knot_vector(degree, knot_vector, num_ctrlpts):
 
 def generate_uniform(degree, num_ctrlpts):
     """
-    Generates uniform, clamped knot vector on [0, 1] given basis degree and number of control points.
+    Generates uniform, clamped knot vector on [0, 1] given basis degree and
+    number of control points.
 
     Parameters
     ----------
@@ -144,7 +146,8 @@ def generate_uniform(degree, num_ctrlpts):
 
 def find_multiplicity(knot, knot_vector):
     """
-    Helper function for finding the multiplicity of a given knot in a given knot vector
+    Helper function for finding the multiplicity of a given knot in a given
+    knot vector
 
     Parameters
     ----------
@@ -169,8 +172,8 @@ def curve_knot_insertion(degree, old_knot_vector, old_ctrlpts, inserted_knot, nu
     """
     Algorithm A5.1, The NURBS Book, 1997
 
-    Inserts knot found in knot span of old knot vector with given multiplicity a given number of times and returns the
-    new knot vector
+    Inserts knot found in knot span of old knot vector with given multiplicity
+    a given number of times and returns the new knot vector
 
     Parameters
     ----------
