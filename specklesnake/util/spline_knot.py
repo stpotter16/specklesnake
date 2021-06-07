@@ -140,7 +140,8 @@ def generate_uniform(degree, num_ctrlpts):
     # Create evenly spaced knots from 0 to 1 of number num_middle_knots
     middle_knot_vector = np.linspace(0, 1, num_middle_knots)
     # Append middle knot vector with repeated knots on beginning and end
-    knot_vector = np.concatenate((np.zeros(degree), middle_knot_vector, np.ones(degree)))
+    knot_vector = np.concatenate((np.zeros(degree), middle_knot_vector,
+                                  np.ones(degree)))
     return knot_vector
 
 
@@ -168,7 +169,8 @@ def find_multiplicity(knot, knot_vector):
     return mult
 
 
-def curve_knot_insertion(degree, old_knot_vector, old_ctrlpts, inserted_knot, num_inserts=1):
+def curve_knot_insertion(degree, old_knot_vector, old_ctrlpts, inserted_knot,
+                         num_inserts=1):
     """
     Algorithm A5.1, The NURBS Book, 1997
 
@@ -197,7 +199,8 @@ def curve_knot_insertion(degree, old_knot_vector, old_ctrlpts, inserted_knot, nu
     """
 
     # Find span and multiplicity
-    inserted_knot_span = find_span(len(old_ctrlpts), degree, inserted_knot, old_knot_vector)
+    inserted_knot_span = find_span(len(old_ctrlpts), degree, inserted_knot,
+                                   old_knot_vector)
 
     knot_multiplicity = find_multiplicity(inserted_knot, old_knot_vector)
 
@@ -235,12 +238,16 @@ def curve_knot_insertion(degree, old_knot_vector, old_ctrlpts, inserted_knot, nu
         L = inserted_knot_span - degree + j
 
         for i in range(0, degree - j - knot_multiplicity + 1):
-            alpha = (inserted_knot - old_knot_vector[L + i]) / (old_knot_vector[i + inserted_knot_span + 1]
-                                                                - old_knot_vector[L + i])
+            numerator = inserted_knot - old_knot_vector[L + i]
+            top_knot = old_knot_vector[i + inserted_knot_span + 1]
+            bottom_knot = old_knot_vector[L + i]
+            denominator = top_knot - bottom_knot
+            alpha = numerator / denominator
             R[i, :] = alpha * R[i + 1, :] + (1.0 - alpha) * R[i, :]
 
         new_ctrlpts[L, :] = R[0, :]
-        new_ctrlpts[inserted_knot_span + num_inserts - j - knot_multiplicity, :] = R[degree - j - knot_multiplicity, :]
+        new_idx = inserted_knot_span + num_inserts - j - knot_multiplicity
+        new_ctrlpts[new_idx, :] = R[degree - j - knot_multiplicity, :]
 
     # Load new the rest of the control points
     L = inserted_knot_span - degree + num_inserts

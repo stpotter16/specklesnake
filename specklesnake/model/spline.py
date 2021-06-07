@@ -59,8 +59,8 @@ class BSplineSurface:
     @num_ctrlpts_u.setter
     def num_ctrlpts_u(self, num):
         if num < self.degree_u + 1:
-            msg = ('Number of control points in u must be {} '
-                   'for a surface with u degree of {}').format(self.degree_u + 1, self.degree_u)
+            msg = (f'Number of control points in u must be {self.degree_u + 1}'
+                   f' for a surface with u degree of {self.degree_u}')
             raise ValueError(msg)
 
         self._num_control_points_u = num
@@ -72,8 +72,8 @@ class BSplineSurface:
     @num_ctrlpts_v.setter
     def num_ctrlpts_v(self, num):
         if num < self.degree_v + 1:
-            msg = ('Number of control points in v must be {} '
-                   'for a surface with v degree of {}').format(self.degree_v + 1, self.degree_v)
+            msg = (f'Number of control points in v must be {self.degree_v + 1}'
+                   f' for a surface with v degree of {self.degree_v}')
             raise ValueError(msg)
 
         self._num_control_points_v = num
@@ -85,10 +85,12 @@ class BSplineSurface:
     @control_points.setter
     def control_points(self, ctrlpt_array):
         if self._degree_u is None:
-            raise ValueError('Surface degree u must be set before setting control points')
+            msg = 'Surface degree u must be set before setting control points'
+            raise ValueError(msg)
 
         if self._degree_v is None:
-            raise ValueError('Surface degree v must be set before setting control points')
+            msg = 'Surface degree v must be set before setting control points'
+            raise ValueError(msg)
 
         if ctrlpt_array.ndim != 2:
             raise ValueError('Control point points must be in R2')
@@ -102,13 +104,19 @@ class BSplineSurface:
     @knot_vector_u.setter
     def knot_vector_u(self, kv):
         if self._degree_u is None:
-            raise ValueError('Surface degree in u direction must be set before setting knot vector')
+            msg = ('Surface degree in u direction must be set before setting '
+                   'knot vector')
+            raise ValueError(msg)
 
         if self._control_points is None:
-            raise ValueError("Surface control points must be set before setting knot vector")
+            msg = ('Surface control points must be set before setting knot'
+                   'vector')
+            raise ValueError(msg)
 
         if self._num_control_points_u is None:
-            raise ValueError('Surface control point number in u must be set before setting knot vector')
+            msg = ('Surface control point number in u must be set before '
+                   'setting knot vector')
+            raise ValueError(msg)
 
         if self._check_knot_vector(kv, direction='u'):
             self._knot_vector_u = kv
@@ -120,13 +128,19 @@ class BSplineSurface:
     @knot_vector_v.setter
     def knot_vector_v(self, kv):
         if self._degree_v is None:
-            raise ValueError('Surface degree in v direction must be set before setting knot vector')
+            msg = ('Surface degree in v direction must be set before setting '
+                   'knot vector')
+            raise ValueError(msg)
 
         if self._control_points is None:
-            raise ValueError("Surface control points must be set before setting knot vector")
+            msg = ('Surface control points must be set before setting knot '
+                   'vector')
+            raise ValueError(msg)
 
         if self._num_control_points_v is None:
-            raise ValueError('Surface control point number in v must be set before setting knot vector')
+            msg = ('Surface control point number in v must be set before '
+                   'setting knot vector')
+            raise ValueError(msg)
 
         if self._check_knot_vector(kv, direction='v'):
             self._knot_vector_v = kv
@@ -154,20 +168,27 @@ class BSplineSurface:
         if not validate_knot(v):
             raise ValueError('v parameter must be in interval [0, 1]')
 
-        u_span = find_span(self._num_control_points_u, self._degree_u, u, self._knot_vector_u)
-        v_span = find_span(self._num_control_points_v, self._degree_v, v, self._knot_vector_v)
-        basis_funs_u = basis_functions(u_span, u, self._degree_u, self._knot_vector_u)
-        basis_funs_v = basis_functions(v_span, v, self._degree_v, self._knot_vector_v)
+        u_span = find_span(self._num_control_points_u, self._degree_u, u,
+                           self._knot_vector_u)
+        v_span = find_span(self._num_control_points_v, self._degree_v, v,
+                           self._knot_vector_v)
+        basis_funs_u = basis_functions(u_span, u, self._degree_u,
+                                       self._knot_vector_u)
+        basis_funs_v = basis_functions(v_span, v, self._degree_v,
+                                       self._knot_vector_v)
         ctrlpt_x = self._control_points[:, 0]
         ctrlpt_y = self._control_points[:, 1]
 
-        x_array = np.reshape(ctrlpt_x, (self._num_control_points_u, self._num_control_points_v))
-        y_array = np.reshape(ctrlpt_y, (self._num_control_points_u, self._num_control_points_v))
+        new_shape = (self._num_control_points_u, self._num_control_points_v)
+        x_array = np.reshape(ctrlpt_x, new_shape)
+        y_array = np.reshape(ctrlpt_y, new_shape)
 
-        x = basis_funs_u @ x_array[u_span - self._degree_u:u_span + 1, v_span - self._degree_v:v_span + 1] \
-            @ basis_funs_v
-        y = basis_funs_u @ y_array[u_span - self._degree_u:u_span + 1, v_span - self._degree_v:v_span + 1] \
-            @ basis_funs_v
+        u_start, u_stop = u_span - self._degree_u, u_span + 1
+        v_start, v_stop = v_span - self._degree_v, v_span + 1
+        x_ctrlpts = x_array[u_start:u_stop, v_start:v_stop]
+        y_ctrlpts = y_array[u_start:u_stop, v_start:v_stop]
+        x = basis_funs_u @ x_ctrlpts @ basis_funs_v
+        y = basis_funs_u @ y_ctrlpts @ basis_funs_v
 
         point = np.array([x, y])
 
@@ -190,7 +211,8 @@ class BSplineSurface:
         if knot_array.ndim != 2:
             raise ValueError('Parameter array must be 2D')
 
-        values = [self.single_point(parameter[0], parameter[1]) for parameter in knot_array]
+        values = [self.single_point(parameter[0], parameter[1]) for
+                  parameter in knot_array]
 
         return np.array(values)
 
@@ -227,33 +249,47 @@ class BSplineSurface:
         max_order_u = min(order_u, self._degree_u)
         max_order_v = min(order_v, self._degree_v)
 
-        u_span = find_span(self._num_control_points_u, self._degree_u, u, self._knot_vector_u)
-        v_span = find_span(self._num_control_points_v, self._degree_v, v, self._knot_vector_v)
+        u_span = find_span(self._num_control_points_u, self._degree_u, u,
+                           self._knot_vector_u)
+        v_span = find_span(self._num_control_points_v, self._degree_v, v,
+                           self._knot_vector_v)
 
-        basis_funs_u_ders = basis_function_ders(u_span, u, self._degree_u, self._knot_vector_u, max_order_u)
-        basis_funs_v_ders = basis_function_ders(v_span, v, self._degree_v, self._knot_vector_v, max_order_v)
+        basis_funs_u_ders = basis_function_ders(u_span, u, self._degree_u,
+                                                self._knot_vector_u,
+                                                max_order_u)
+        basis_funs_v_ders = basis_function_ders(v_span, v, self._degree_v,
+                                                self._knot_vector_v,
+                                                max_order_v)
 
         ctrlpt_x = self._control_points[:, 0]
         ctrlpt_y = self._control_points[:, 1]
 
-        x_array = np.reshape(ctrlpt_x, (self._num_control_points_u, self._num_control_points_v))
-        y_array = np.reshape(ctrlpt_y, (self._num_control_points_u, self._num_control_points_v))
+        new_shape = (self._num_control_points_u, self._num_control_points_v)
+        x_array = np.reshape(ctrlpt_x, new_shape)
+        y_array = np.reshape(ctrlpt_y, new_shape)
 
-        x_active = x_array[u_span - self._degree_u:u_span + 1, v_span - self._degree_v:v_span + 1]
-        y_active = y_array[u_span - self._degree_u:u_span + 1, v_span - self._degree_v:v_span + 1]
+        u_start, u_stop = u_span - self._degree_u, u_span + 1
+        v_start, v_stop = v_span - self._degree_v, v_span + 1
+        x_active = x_array[u_start:u_stop, v_start:v_stop]
+        y_active = y_array[u_start:u_stop, v_start:v_stop]
 
         derivs = np.zeros(((max_order_u + 1) * (max_order_v + 1), 2))
 
         index = 0
         for u_row in range(0, max_order_u + 1):
+            u_ders = basis_funs_u_ders[:, u_row]
             for v_row in range(0, max_order_v + 1):
 
-                x = basis_funs_u_ders[:, u_row] @ x_active @ basis_funs_v_ders[:, v_row]
-                y = basis_funs_u_ders[:, u_row] @ y_active @ basis_funs_v_ders[:, v_row]
+                v_ders = basis_funs_v_ders[:, v_row]
+                x = u_ders @ x_active @ v_ders
+                y = u_ders @ y_active @ v_ders
 
                 val = np.array([x, y])
 
-                if normalize and not np.isclose(np.linalg.norm(val), 0.0) and index != 0:
+                condition = (normalize and
+                             not np.isclose(np.linalg.norm(val), 0.0) and
+                             index != 0)
+                if condition:
                     val = val / np.linalg.norm(val)
 
                 derivs[index, :] = val
@@ -266,7 +302,9 @@ class BSplineSurface:
         """ Check that knot vector is valid
         """
         if direction == 'u':
-            check = check_knot_vector(self._degree_u, kv, self._num_control_points_u)
+            check = check_knot_vector(self._degree_u, kv,
+                                      self._num_control_points_u)
         else:
-            check = check_knot_vector(self._degree_v, kv, self._num_control_points_v)
+            check = check_knot_vector(self._degree_v, kv,
+                                      self._num_control_points_v)
         return check

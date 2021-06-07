@@ -188,13 +188,17 @@ def one_basis_function(degree, knot_vector, knot_span, knot):
 
     # Check some special cases first.
     # Account for the fact that arrays are zero indexed
-    if (knot_span == 0 and knot == knot_vector[0]) or \
-            (knot_span == len(knot_vector) - degree - 2 and knot == knot_vector[len(knot_vector) - 1]):
+    condition = ((knot_span == 0 and knot == knot_vector[0]) or
+                 (knot_span == len(knot_vector) - degree - 2 and
+                 knot == knot_vector[len(knot_vector - 1)]))
+    if condition:
         return 1.0
 
     # If knot value is outside the compact support of the basis function
     # return zero
-    if knot < knot_vector[knot_span] or knot > knot_vector[knot_span + degree + 1]:
+    condition = (knot < knot_vector[knot_span] or
+                 knot > knot_vector[knot_span + degree + 1])
+    if condition:
         return 0.0
 
     # Initialize zero degree functions. Length corresponds to number of knot
@@ -209,7 +213,9 @@ def one_basis_function(degree, knot_vector, knot_span, knot):
     for k in range(1, degree + 1):
         saved = 0.0
         if N[0] != 0.0:
-            saved = ((knot - knot_vector[knot_span]) * N[0]) / (knot_vector[knot_span + k] - knot_vector[knot_span])
+            numerator = (knot - knot_vector[knot_span]) * N[0]
+            demoninator = knot_vector[knot_span + k] - knot_vector[knot_span]
+            saved = numerator / demoninator
 
         for j in range(0, degree - k + 1):
             Uleft = knot_vector[knot_span + j + 1]
@@ -257,7 +263,10 @@ def one_basis_function_ders(degree, knot_vector, knot_span, knot, deriv_order):
     ders = np.zeros(deriv_order + 1)
 
     # Check that knot is in support of basis function
-    if knot < knot_vector[knot_span] or knot >= knot_vector[knot_span + degree + 1]:
+    condition = (knot < knot_vector[knot_span] or
+                 knot >= knot_vector[knot_span + degree + 1])
+
+    if condition:
         return ders
 
     # Initialize variable to hold table of lower order basis values
@@ -272,8 +281,9 @@ def one_basis_function_ders(degree, knot_vector, knot_span, knot, deriv_order):
     for k in range(1, degree + 1):
         saved = 0.0
         if N[0, k - 1] != 0.0:
-            saved = ((knot - knot_vector[knot_span]) * N[0, k - 1]) / (knot_vector[knot_span + k]
-                                                                       - knot_vector[knot_span])
+            numerator = (knot - knot_vector[knot_span]) * N[0, k - 1]
+            denominator = knot_vector[knot_span + k] - knot_vector[knot_span]
+            saved = numerator / denominator
 
         for j in range(0, degree - k + 1):
             Uleft = knot_vector[knot_span + j + 1]
@@ -302,7 +312,11 @@ def one_basis_function_ders(degree, knot_vector, knot_span, knot, deriv_order):
         for jj in range(1, k + 1):
             saved = 0.0
             if ND[0] != 0.0:
-                saved = ND[0] / (knot_vector[knot_span + degree - k + jj] - knot_vector[knot_span])
+                numerator = ND[0]
+                first_knot = knot_vector[knot_span + degree - k + jj]
+                last_knot = knot_vector[knot_span]
+                denominator = first_knot - last_knot
+                saved = numerator / denominator
 
             for j in range(0, k - jj + 1):
                 Uleft = knot_vector[knot_span + j + 1]

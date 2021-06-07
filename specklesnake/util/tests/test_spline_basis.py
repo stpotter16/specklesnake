@@ -40,7 +40,8 @@ class TestSplineBasisFunctions(unittest.TestCase):
         deriv_order = 2
 
         # The NURBS Book Ex. 2.4
-        ders_vals = basis_function_ders(knot_span, knot, degree, knot_vector, deriv_order)
+        ders_vals = basis_function_ders(knot_span, knot, degree, knot_vector,
+                                        deriv_order)
 
         expected = np.array([[0.125, -0.5, 1.0],
                             [0.75, 0, -2.0],
@@ -75,7 +76,9 @@ class TestSplineBasisFunctions(unittest.TestCase):
         deriv_order = 2
 
         # The NURBS Book Ex. 2.4
-        basis_deriv_vals = one_basis_function_ders(degree, knot_vector, knot_span, knot, deriv_order)
+        basis_deriv_vals = one_basis_function_ders(degree, knot_vector,
+                                                   knot_span, knot,
+                                                   deriv_order)
 
         expected = np.array([0.125, 0.5, 1.0])
 

@@ -41,9 +41,11 @@ class TestBSplineSurface(unittest.TestCase):
         assert_array_almost_equal(ctrlpt_array, self.surface.control_points)
 
     def test_surface_knot_vectors(self):
-        uvec = generate_uniform(self.surface.degree_u, self.surface.num_ctrlpts_u)
+        uvec = generate_uniform(self.surface.degree_u,
+                                self.surface.num_ctrlpts_u)
         assert_array_almost_equal(self.surface.knot_vector_u, uvec)
-        vvec = generate_uniform(self.surface.degree_v, self.surface.num_ctrlpts_v)
+        vvec = generate_uniform(self.surface.degree_v,
+                                self.surface.num_ctrlpts_v)
         assert_array_almost_equal(self.surface.knot_vector_v, vvec)
 
     def test_surface_control_point_guard(self):
@@ -61,7 +63,8 @@ class TestBSplineSurface(unittest.TestCase):
         ctrlpt_array = self.surface.control_points
 
         new_surface = BSplineSurface(degree_u=2, degree_v=2)
-        knot_vec = generate_uniform(new_surface.degree_u, self.surface.num_ctrlpts_u)
+        knot_vec = generate_uniform(new_surface.degree_u,
+                                    self.surface.num_ctrlpts_u)
         with self.assertRaises(ValueError):
             new_surface.knot_vector_u = knot_vec
 
@@ -70,7 +73,8 @@ class TestBSplineSurface(unittest.TestCase):
             new_surface.knot_vector_u = knot_vec
 
         new_surface = BSplineSurface(degree_u=2, degree_v=2)
-        knot_vec = generate_uniform(new_surface.degree_v, self.surface.num_ctrlpts_v)
+        knot_vec = generate_uniform(new_surface.degree_v,
+                                    self.surface.num_ctrlpts_v)
         with self.assertRaises(ValueError):
             new_surface.knot_vector_v = knot_vec
 
@@ -117,7 +121,8 @@ class TestBSplineSurface(unittest.TestCase):
             (1.0, 1.0,  (4.0, 4.0))
         ]
         for u_val, v_val, expected in cases:
-            derivatives = self.surface.derivatives(u_val, v_val, 2, 2, normalize=False)
+            derivatives = self.surface.derivatives(u_val, v_val, 2, 2,
+                                                   normalize=False)
             point = derivatives[0, :]
             assert_array_almost_equal(expected, point)
 
@@ -131,7 +136,8 @@ class TestBSplineSurface(unittest.TestCase):
             (1.0, 1.0,  (6.0, 0.0))
         ]
         for u_val, v_val, expected in cases:
-            derivatives = self.surface.derivatives(u_val, v_val, 2, 2, normalize=False)
+            derivatives = self.surface.derivatives(u_val, v_val, 2, 2,
+                                                   normalize=False)
             u1 = derivatives[3, :]
             assert_array_almost_equal(expected, u1)
 
@@ -145,7 +151,8 @@ class TestBSplineSurface(unittest.TestCase):
             (1.0, 1.0,  (9.0, 0.0))
         ]
         for u_val, v_val, expected in cases:
-            derivatives = self.surface.derivatives(u_val, v_val, 2, 2, normalize=False)
+            derivatives = self.surface.derivatives(u_val, v_val, 2, 2,
+                                                   normalize=False)
             u2 = derivatives[6, :]
             assert_array_almost_equal(expected, u2)
 
@@ -159,7 +166,8 @@ class TestBSplineSurface(unittest.TestCase):
             (1.0, 1.0,  (0.0, 6.0))
         ]
         for u_val, v_val, expected in cases:
-            derivatives = self.surface.derivatives(u_val, v_val, 2, 2, normalize=False)
+            derivatives = self.surface.derivatives(u_val, v_val, 2, 2,
+                                                   normalize=False)
             v1 = derivatives[1, :]
             assert_array_almost_equal(expected, v1)
 
@@ -173,7 +181,8 @@ class TestBSplineSurface(unittest.TestCase):
             (1.0, 1.0,  (0.0, 9.0))
         ]
         for u_val, v_val, expected in cases:
-            derivatives = self.surface.derivatives(u_val, v_val, 2, 2, normalize=False)
+            derivatives = self.surface.derivatives(u_val, v_val, 2, 2,
+                                                   normalize=False)
             v2 = derivatives[2, :]
             assert_array_almost_equal(expected, v2)
 
@@ -187,6 +196,7 @@ class TestBSplineSurface(unittest.TestCase):
             (1.0, 1.0,  (0.0, 0.0))
         ]
         for u_val, v_val, expected in cases:
-            derivatives = self.surface.derivatives(u_val, v_val, 2, 2, normalize=False)
+            derivatives = self.surface.derivatives(u_val, v_val, 2, 2,
+                                                   normalize=False)
             uv = derivatives[4, :]
             assert_array_almost_equal(expected, uv)
