@@ -72,7 +72,7 @@ class TestSplineBasisFunctions(unittest.TestCase):
         span = degree
         knot = 0.5
 
-        # Should raise an error
+        # Smoke test
         one_basis_function(degree, knot_vector, span, knot)
 
     def test_one_basis_function_ders(self):
