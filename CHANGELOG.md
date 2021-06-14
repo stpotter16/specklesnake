@@ -29,6 +29,10 @@
 - Add Bspline basis function tests [\#4](https://github.com/stpotter16/specklesnake/pull/4)
 - Add Bspline basis and knot utility functions [\#3](https://github.com/stpotter16/specklesnake/pull/3)
 
+**Fixed:**
+
+- Fix bug in max knot span basis function check [\#18](https://github.com/stpotter16/specklesnake/pull/18)
+
 **Internal:**
 
 - Add flake8 linting [\#14](https://github.com/stpotter16/specklesnake/pull/14)
