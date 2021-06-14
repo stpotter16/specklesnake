@@ -66,6 +66,15 @@ class TestSplineBasisFunctions(unittest.TestCase):
 
         assert_array_almost_equal(basis_vals, expected)
 
+    def test_one_basis_function_max_span(self):
+        degree = 3
+        knot_vector = [0., 0., 0., 0., 1., 1., 1., 1.]
+        span = degree
+        knot = 0.5
+
+        # Smoke test
+        one_basis_function(degree, knot_vector, span, knot)
+
     def test_one_basis_function_ders(self):
 
         degree = 2

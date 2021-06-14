@@ -190,7 +190,7 @@ def one_basis_function(degree, knot_vector, knot_span, knot):
     # Account for the fact that arrays are zero indexed
     condition = ((knot_span == 0 and knot == knot_vector[0]) or
                  (knot_span == len(knot_vector) - degree - 2 and
-                 knot == knot_vector[len(knot_vector - 1)]))
+                 knot == knot_vector[len(knot_vector) - 1]))
     if condition:
         return 1.0
 
